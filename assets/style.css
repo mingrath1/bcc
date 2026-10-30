@@ -430,6 +430,16 @@ a:hover {
   }
 }
 
+@media (min-width: 781px) and (max-height: 700px) {
+  .page-head {
+    min-height: 0;
+  }
+
+  .page-preview {
+    display: none;
+  }
+}
+
 @media (max-width: 780px) {
   :root {
     --text: 1.125rem;
