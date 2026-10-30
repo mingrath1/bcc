@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90">
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path class="portrait__tone" d="M43 17c-8-8-22-1-22 9-8 2-11 12-6 19-5 8-1 19 8 21 1 9 11 14 20 9 4 3 8 3 12 0 9 4 18-2 18-11 8-4 9-15 3-21 3-9-4-18-13-18-3-8-13-11-20-8Z"/>
+    <path d="M44 18c-7-9-22-3-22 7-8 0-12 10-8 17-6 5-5 16 3 20-2 9 7 17 16 13 4 5 9 5 13 1 9 4 19-3 18-12 8-2 11-13 5-19 4-8-2-18-11-18-2-9-14-13-21-6"/>
+    <path d="M45 24v49M34 25c-7 1-9 9-4 13-8 2-9 12-3 16-5 5-1 13 6 12M56 26c7 2 7 10 2 13 8 3 7 13 1 16 4 6-1 12-7 12M22 34c7-2 12 2 11 8M18 49c7-3 14 1 14 7M24 63c4-4 11-3 13 2M57 32c5-3 11 0 12 5M58 48c6-2 11 2 10 8M51 65c5-4 11-3 14 1"/>
+    <path class="portrait__shade" d="M38 73c1 5 0 9-2 13h23c-3-4-4-8-3-13Z" fill="currentColor" opacity=".12"/>
+    <path d="M39 74c1 5 0 9-2 12M54 74c0 4 2 9 4 12"/>
+    <circle class="portrait__eye" cx="38" cy="45" r="1.7" fill="currentColor" stroke="none"/>
+    <circle class="portrait__eye" cx="52" cy="45" r="1.7" fill="currentColor" stroke="none"/>
+    <path d="M39 56c4 3 8 3 12 0"/>
+  </g>
+</svg>
