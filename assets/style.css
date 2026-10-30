@@ -59,7 +59,6 @@ a {
 a:hover { text-decoration-thickness: 2px; }
 img, svg, video { display: block; }
 img { max-width: 100%; height: auto; }
-strong { font-weight: 400; -webkit-text-stroke: .35px currentColor; }
 ::selection { background: var(--blue); color: var(--paper); }
 :focus-visible { outline: 2px solid var(--soft); outline-offset: .2rem; }
 [hidden] { display: none !important; }
