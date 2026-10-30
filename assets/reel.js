@@ -1,113 +1,196 @@
+// The film reel and the drawing's eyes. Without motion or JavaScript the article simply has neither.
 (() => {
+  const root = document.documentElement;
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = matchMedia("(hover: hover) and (pointer: fine)");
+
+  const eyes = [...document.querySelectorAll(".masthead__drawing .portrait__eye")];
+  if (!calm && eyes.length && canHover.matches) {
+    let looking = null;
+    let queued = false;
+    const look = () => {
+      queued = false;
+      for (const eye of eyes) {
+        if (!looking) {
+          eye.removeAttribute("transform");
+          continue;
+        }
+        const box = eye.getBoundingClientRect();
+        const angle = Math.atan2(looking[1] - box.y - box.height / 2, looking[0] - box.x - box.width / 2);
+        eye.setAttribute("transform", `translate(${(Math.cos(angle) * 0.7).toFixed(2)} ${(Math.sin(angle) * 0.7).toFixed(2)})`);
+      }
+    };
+    const aim = (spot) => {
+      looking = spot;
+      if (!queued) requestAnimationFrame(look);
+      queued = true;
+    };
+    addEventListener("pointermove", (event) => aim([event.clientX, event.clientY]), { passive: true });
+    root.addEventListener("pointerleave", () => aim(null));
+  }
+
   const reel = document.querySelector(".reel");
-  if (!reel) return;
-  const track = reel.querySelector(".reel__track");
-  const slides = [...reel.querySelectorAll(".reel__video")];
-  const highlights = [...document.querySelectorAll(".highlight")];
-  const intro = reel.closest(".intro");
-  const originalParent = reel.parentElement;
-  const originalNext = reel.nextElementSibling;
-  const motion = matchMedia("(prefers-reduced-motion: no-preference)");
-  const wide = matchMedia("(min-width: 48.8125em) and (min-height: 45.0625em)");
-  const tablet = matchMedia("(max-width: 48.75em)");
-  const phone = matchMedia("(max-width: 33.75em)");
+  const strip = reel?.querySelector(".reel__strip");
+  if (calm || !reel || !strip) return;
+  root.classList.add("has-reel");
 
-  let ready = false;
+  const clips = [...strip.children];
+  const chapters = [...document.querySelectorAll(".chapter")];
+  const runs = [...document.querySelectorAll(".run")];
+  const masthead = reel.parentElement;
+  const before = reel.nextElementSibling;
+  const quiet = navigator.connection?.saveData === true;
+  const rail = matchMedia("(min-width: 781px) and (min-height: 721px)");
+  const beside = matchMedia("(min-width: 541px) and (max-width: 780px)");
+  const phone = matchMedia("(max-width: 540px)");
+
+  strip.style.setProperty("--strip", clips.length);
+  reel.style.setProperty("--strip", clips.length);
+  for (const run of runs) {
+    const slot = document.createElement("div");
+    slot.className = "run__slot";
+    run.append(slot);
+  }
+
+  const source = (clip, number) => {
+    if (clip.src) return;
+    clip.src = `assets/clips/${number}.mp4`;
+  };
+  const start = (clip, number) => {
+    if (quiet) return;
+    source(clip, number);
+    clip.play().catch(() => {});
+  };
+  const pauseAll = (except) => clips.forEach((clip) => clip !== except && !clip.paused && clip.pause());
+
+  // Below a chapter's title on a phone: each clip plays only while it is on screen.
+  let phoneClips = null;
+  const inView = new IntersectionObserver((entries) => {
+    for (const { target, isIntersecting } of entries) {
+      if (isIntersecting && phone.matches) start(target, target.dataset.clip);
+      else if (!target.paused) target.pause();
+    }
+  }, { threshold: 0.2 });
+  const buildPhoneClips = () => {
+    phoneClips = chapters.map((chapter) => {
+      const clip = document.createElement("video");
+      clip.className = "chapter__clip";
+      clip.dataset.clip = chapter.dataset.clip;
+      clip.muted = clip.loop = clip.playsInline = true;
+      clip.preload = "none";
+      clip.tabIndex = -1;
+      clip.setAttribute("aria-hidden", "true");
+      clip.poster = `assets/clips/${chapter.dataset.clip}.webp`;
+      chapter.querySelector(".chapter__media").append(clip);
+      inView.observe(clip);
+      return clip;
+    });
+  };
+
+  let settled = false;
   let hovered = null;
-  let centered = null;
-  let pointer = null;
+  let lastPointer = null;
+  let current = -1;
 
-  document.body.classList.add("has-reel");
-  track.style.setProperty("--reel-count", slides.length);
-
-  const position = () => {
-    if (!hovered || !wide.matches) return;
-    const naturalTop = intro.getBoundingClientRect().top + reel.offsetTop;
-    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    const textTop = hovered.querySelector(".highlight__text").getBoundingClientRect().top;
-    const top = Math.min(Math.max(textTop, rem), innerHeight - rem - reel.offsetHeight);
-    reel.style.setProperty("--reel-shift", `${top - naturalTop}px`);
-  };
-
-  const show = (index) => {
-    reel.classList.toggle("reel--visible", index >= 0);
-    if (index < 0) return;
-    track.style.setProperty("--reel-index", index);
-  };
-
-  const update = () => {
-    if (phone.matches || !motion.matches) {
-      if (reel.parentElement !== originalParent) originalParent.insertBefore(reel, originalNext);
-      show(-1);
-      return;
-    }
-    const focus = tablet.matches ? centered : hovered ?? centered;
-    const index = ready && focus ? slides.findIndex((slide) => slide.dataset.preview === focus.dataset.preview) : -1;
-    const slot = tablet.matches ? focus?.querySelector(".highlight__media") : originalParent;
-    if (index < 0 || !slot) {
-      show(-1);
-      return;
-    }
-    if (reel.parentElement !== slot) {
-      reel.classList.remove("reel--visible");
-      reel.style.removeProperty("--reel-shift");
-      slot.insertBefore(reel, slot === originalParent ? originalNext : null);
-      void track.offsetHeight;
-    }
-    position();
-    show(index);
-  };
-
-  const updateCenter = () => {
+  const lineTarget = (items) => {
     const line = innerHeight / 2;
-    centered = highlights.find((highlight) => {
-      const box = highlight.getBoundingClientRect();
+    return items.find((item) => {
+      const box = item.getBoundingClientRect();
       return box.top <= line && box.bottom > line;
     }) ?? null;
   };
 
-  const updateHover = (target) => {
-    const next = target?.closest?.(".highlight") ?? null;
-    if (next === hovered) return;
-    hovered = next;
-    position();
-    update();
+  const showNumber = (number) => {
+    reel.classList.toggle("is-on", number >= 0);
+    if (number === current) return;
+    current = number;
+    if (number < 0) {
+      pauseAll();
+      return;
+    }
+    strip.style.setProperty("--at", number);
+    pauseAll(clips[number]);
+    start(clips[number], clips[number].dataset.clip);
+  };
+
+  const indexOf = (chapter) => chapters.indexOf(chapter);
+
+  // On the rail the reel lines up with the chapter's words, and never covers the name above it.
+  const lineUp = (chapter) => {
+    const home = masthead.getBoundingClientRect().top + reel.offsetTop;
+    const words = chapter.querySelector(".run, .chapter__title").getBoundingClientRect().top;
+    const firstLine = chapter.getBoundingClientRect().top;
+    const lowest = innerHeight - 16 - reel.offsetHeight;
+    const wanted = Math.min(Math.max(Math.max(words, firstLine), home), lowest);
+    reel.style.setProperty("--slide", `${Math.max(wanted - home, 0)}px`);
+  };
+
+  const moveReel = (slot, at) => {
+    if (reel.parentElement === slot) return;
+    reel.classList.remove("is-on");
+    reel.style.removeProperty("--slide");
+    slot.insertBefore(reel, at);
+    void reel.offsetHeight;
+  };
+
+  const refresh = () => {
+    if (!settled) return;
+    if (phone.matches) {
+      moveReel(masthead, before);
+      showNumber(-1);
+      if (!phoneClips) buildPhoneClips();
+      return;
+    }
+    if (phoneClips) phoneClips.forEach((clip) => clip.pause());
+    if (beside.matches) {
+      const run = lineTarget(runs);
+      if (!run) return;
+      moveReel(run.querySelector(".run__slot"), null);
+      showNumber(indexOf(run.closest(".chapter")));
+      return;
+    }
+    moveReel(masthead, before);
+    if (!rail.matches) {
+      showNumber(-1);
+      return;
+    }
+    const chapter = hovered ?? lineTarget(chapters);
+    if (chapter) lineUp(chapter);
+    showNumber(chapter ? indexOf(chapter) : -1);
+  };
+
+  const hoverAt = (x, y) => {
+    hovered = document.elementFromPoint(x, y)?.closest(".chapter") ?? null;
+    refresh();
   };
 
   addEventListener("pointermove", (event) => {
     if (event.pointerType !== "mouse") return;
-    pointer = event;
-    updateHover(event.target);
+    lastPointer = [event.clientX, event.clientY];
+    hoverAt(...lastPointer);
   }, { passive: true });
-
-  document.documentElement.addEventListener("pointerleave", () => {
-    pointer = null;
-    updateHover(null);
+  root.addEventListener("pointerleave", () => {
+    lastPointer = null;
+    hovered = null;
+    refresh();
   });
-
+  addEventListener("focusin", (event) => {
+    hovered = event.target.closest(".chapter");
+    refresh();
+  });
   addEventListener("scroll", () => {
-    const previous = centered;
-    updateCenter();
-    if (tablet.matches || centered !== previous) update();
-    if (!tablet.matches && pointer) {
-      updateHover(document.elementFromPoint(pointer.clientX, pointer.clientY));
-      position();
-    }
+    if (lastPointer) hoverAt(...lastPointer);
+    else refresh();
   }, { passive: true });
+  addEventListener("resize", refresh, { passive: true });
+  for (const query of [rail, beside, phone]) query.addEventListener("change", refresh);
 
-  const reset = () => {
-    updateCenter();
-    update();
+  const ready = () => {
+    clips.forEach((clip) => (clip.poster = `assets/clips/${clip.dataset.clip}.webp`));
+    settled = true;
+    refresh();
   };
-  wide.addEventListener("change", reset);
-  tablet.addEventListener("change", reset);
-  phone.addEventListener("change", reset);
-  motion.addEventListener("change", reset);
-
-  const start = () => {
-    ready = true;
-    reset();
-  };
-  if (document.readyState === "complete") start();
-  else addEventListener("load", start, { once: true });
+  const whenIdle = () => ("requestIdleCallback" in window ? requestIdleCallback(ready, { timeout: 1200 }) : setTimeout(ready, 300));
+  if (document.readyState === "complete") whenIdle();
+  else addEventListener("load", whenIdle, { once: true });
 })();
