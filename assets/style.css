@@ -1,0 +1,625 @@
+/* The GitHub Pages copy of the BCC post. The tokens and base rules are the ones of mingrath.com that the article uses;
+   the article rules follow from the site's lab.css; the print rules come last. */
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("fonts/dm-sans-latin-wght-normal.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 100 1000;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DM Sans fallback";
+  src: local("Arial");
+  font-display: swap;
+  font-weight: 100 1000;
+  font-style: normal;
+  size-adjust: 104.531%;
+  ascent-override: 94.9001%;
+  descent-override: 29.6563%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Alumni Sans";
+  src: url("fonts/alumni-sans-latin-wght-normal.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Alumni Sans fallback";
+  src: local("Arial");
+  font-display: swap;
+  font-weight: 100 900;
+  font-style: normal;
+  size-adjust: 65.0515%;
+  ascent-override: 138.352%;
+  descent-override: 46.1173%;
+  line-gap-override: 0%;
+}
+
+:root {
+  --color-primary: #000;
+  --color-secondary: #2b47ff;
+  --color-tertiary: #fff;
+  --body-font: "DM Sans", "DM Sans fallback", sans-serif;
+  --heading-font: "Alumni Sans", "Alumni Sans fallback", sans-serif;
+  --text-xs: clamp(14px, 2.5vw, 20px);
+  --text-s: clamp(16px, 3vw, 24px);
+  --text-m: clamp(18px, 3.5vw, 32px);
+  --text-l: clamp(22px, 4vw, 40px);
+  --headline-s: clamp(20px, 4vw, 60px);
+  --headline-m: clamp(28px, 4.5vw, 84px);
+  --border-width: 2px;
+  --content-margin: 2.5vw;
+  --content-margin-sm: 1.5vw;
+  --site-margin-outer: 10px;
+  --section-vpad: 15vw;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --content-margin: 5vw;
+    --section-vpad: 10vw;
+    --border-width: 1.5px;
+    --site-margin-outer: 5px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --section-vpad: 10vw;
+    --border-width: 3px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  background: var(--color-primary);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: clip;
+  background: var(--color-primary);
+  color: var(--color-primary);
+  font-family: var(--body-font);
+  line-height: 1.3;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  border: var(--site-margin-outer) solid var(--color-primary);
+  pointer-events: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 400;
+  overflow-wrap: break-word;
+}
+
+h2 {
+  font-family: var(--heading-font);
+  font-variation-settings: "wght" 500;
+  text-transform: uppercase;
+}
+
+h3 {
+  font-family: var(--heading-font);
+  font-variation-settings: "wght" 400;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-tertiary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--color-primary);
+}
+
+.lab-entry {
+  background: var(--color-secondary);
+  color: var(--color-tertiary);
+}
+
+.lab-entry-meta {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--content-margin-sm);
+  padding: var(--content-margin) var(--content-margin) var(--content-margin);
+}
+
+.lab-entry-pretitle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.5em;
+  font-family: var(--heading-font);
+  font-size: max(18px, var(--text-xs));
+  font-weight: 700;
+  line-height: 1.1;
+  text-transform: uppercase;
+  
+  margin-bottom: max(0px, 26px - 0.55em - var(--content-margin-sm));
+}
+
+.lab-entry-pretitle a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block: calc(0.55em - 22px);
+}
+
+.lab-entry-title {
+  color: var(--color-primary);
+  font-family: var(--heading-font);
+  font-size: var(--headline-m);
+  font-weight: 400;
+  line-height: 0.8em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+.lab-entry-content {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.lab-entry-body {
+  width: 60%;
+  padding: calc(var(--content-margin) * 2) var(--content-margin) var(--section-vpad);
+  border-left: var(--border-width) solid var(--color-primary);
+  font-family: var(--body-font);
+  font-size: var(--text-s);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.lab-entry-body p, .lab-entry-body blockquote {
+  margin-bottom: var(--text-xs);
+}
+
+.lab-entry-body section > p:first-of-type {
+  font-size: 1.1em;
+}
+
+.lab-entry-body h2 {
+  margin: var(--headline-s) 0 0.6em;
+  color: var(--color-primary);
+  font-family: var(--heading-font);
+  font-size: var(--headline-m);
+  line-height: 0.8em;
+  text-wrap: balance;
+}
+
+.lab-entry-body h3 {
+  margin: var(--text-l) 0 var(--text-xs);
+  font-family: var(--body-font);
+  font-size: var(--text-m);
+  font-weight: 700;
+  line-height: 1em;
+}
+
+.lab-entry-body ul, .lab-entry-body ol {
+  margin-bottom: 1.5em;
+  padding-left: 1.5rem;
+}
+
+.lab-entry-body li + li {
+  margin-top: 0.3em;
+}
+
+.lab-entry-body a {
+  text-underline-offset: 0.15em;
+}
+
+.lab-entry-body blockquote {
+  padding-left: var(--content-margin-sm);
+  border-left: var(--border-width) solid var(--color-primary);
+}
+
+.lab-entry-body code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.85em;
+}
+
+.lab-entry-body img {
+  width: 100%;
+  margin: var(--headline-s) 0;
+  border: var(--border-width) solid var(--color-primary);
+}
+
+@media (max-width: 768px) {
+  .lab-entry-body {
+    width: 100%;
+    padding: var(--content-margin) var(--content-margin) var(--section-vpad);
+    border-left: 0;
+  }
+}
+
+.lab-entry-body .lab-figure {
+  margin: var(--headline-s) 0;
+}
+
+.lab-entry-body .lab-figure > a {
+  display: block;
+}
+
+.lab-entry-body .lab-figure img {
+  display: block;
+  height: auto;
+  margin: 0;
+  background: var(--color-primary);
+}
+
+.lab-entry-body .lab-figure figcaption {
+  margin-top: 0.6em;
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+
+.lab-entry-body .lab-video {
+  margin: var(--headline-s) 0;
+}
+
+.lab-entry-body .lab-video iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: var(--border-width) solid var(--color-primary);
+  background: var(--color-primary);
+}
+
+.lab-entry-body .lab-video figcaption {
+  margin-top: 0.6em;
+  font-size: var(--text-xs);
+  line-height: 1.4;
+}
+
+.lab-entry-body table {
+  width: 100%;
+  margin: var(--text-l) 0;
+  border-collapse: collapse;
+  border-top: var(--border-width) solid var(--color-primary);
+  font-size: 0.85em;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
+}
+
+.lab-entry-body th, .lab-entry-body td {
+  padding: 0.55em 0.75em 0.5em 0;
+  border-bottom: var(--border-width) solid var(--color-primary);
+  vertical-align: top;
+  
+  overflow-wrap: break-word;
+}
+
+.lab-entry-body :is(th, td):last-child {
+  padding-right: 0;
+}
+
+.lab-entry-body th {
+  font-weight: 700;
+}
+
+.lab-entry-body .lab-faq {
+  border-bottom: var(--border-width) solid var(--color-primary);
+}
+
+.lab-entry-body .lab-faq:first-child, .lab-entry-body :not(.lab-faq) + .lab-faq {
+  margin-top: var(--text-xs);
+  border-top: var(--border-width) solid var(--color-primary);
+}
+
+.lab-entry-body .lab-faq:not(:has(+ .lab-faq)) {
+  margin-bottom: var(--text-l);
+}
+
+.lab-entry-body .lab-faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--content-margin-sm);
+  min-height: 44px;
+  padding: 0.5em 0;
+  font-weight: 700;
+  line-height: 1.25;
+  list-style: none;
+  cursor: pointer;
+}
+
+.lab-entry-body .lab-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.lab-entry-body .lab-faq summary::after {
+  content: "+" / "";
+  flex: none;
+  width: 1em;
+  font-family: var(--heading-font);
+  font-size: 1.5em;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+}
+
+.lab-entry-body .lab-faq[open] summary::after {
+  content: "\2212" / "";
+}
+
+.lab-entry-body .lab-faq summary:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.lab-entry-body .lab-faq[open] > :last-child {
+  margin-bottom: var(--content-margin);
+}
+
+.lab-entry-body .lab-faq .lab-figure {
+  margin: var(--text-xs) 0;
+}
+
+.lab-entry-body .lab-note {
+  margin: var(--text-l) 0;
+  padding: var(--content-margin-sm) var(--content-margin);
+  background: var(--color-primary);
+  color: var(--color-tertiary);
+}
+
+.lab-entry-body .lab-note > :last-child {
+  margin-bottom: 0;
+}
+
+.lab-entry-body .lab-note a {
+  color: inherit;
+}
+
+@media (max-width: 768px) {
+  .lab-entry-body table {
+    font-size: 0.8em;
+  }
+
+  .lab-entry-body .lab-note {
+    padding: var(--content-margin);
+  }
+}
+
+/* The block above the post: the title and the lines around it, in the place of the site's hero. */
+.page-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-margin-sm);
+  padding: calc(var(--content-margin) * 2 + var(--site-margin-outer)) calc(var(--content-margin) + var(--site-margin-outer)) var(--content-margin);
+  border-bottom: var(--border-width) solid var(--color-primary);
+}
+
+.page-head .lab-entry-title {
+  max-width: 24em;
+  line-height: 0.9em;
+}
+
+.page-head p {
+  font-family: var(--body-font);
+  font-size: var(--text-s);
+  line-height: 1.3;
+}
+
+.page-head .page-byline {
+  font-weight: 700;
+}
+
+.page-head .page-project,
+.page-head .page-thai {
+  font-size: var(--text-xs);
+}
+
+.page-head a {
+  text-underline-offset: 0.15em;
+}
+
+/* Under the 10 px frame of the page. */
+.lab-entry-body {
+  padding-right: calc(var(--content-margin) + var(--site-margin-outer));
+}
+
+@media (max-width: 768px) {
+  .page-head {
+    gap: 2vw;
+  }
+
+  .lab-entry-body {
+    padding-left: calc(var(--content-margin) + var(--site-margin-outer));
+  }
+}
+
+/* The film poster and its link stand in for the player on paper. */
+.print-film {
+  display: none;
+}
+
+@page {
+  size: A4;
+  margin: 15mm 15mm 16mm;
+}
+
+@media print {
+  /* Dark ink on white paper, so nothing is lost when a browser prints without its background graphics. */
+  :root {
+    --color-primary: #000;
+    --color-secondary: #fff;
+    --color-tertiary: #000;
+    --text-xs: 9pt;
+    --text-s: 10.5pt;
+    --text-m: 12.5pt;
+    --text-l: 15pt;
+    --headline-s: 16pt;
+    --headline-m: 23pt;
+    --border-width: 0.75pt;
+    --content-margin: 5mm;
+    --content-margin-sm: 2.5mm;
+    --site-margin-outer: 0px;
+    --section-vpad: 0px;
+  }
+
+  html,
+  body,
+  .lab-entry {
+    overflow: visible;
+    background: #fff;
+    color: #000;
+  }
+
+  body::after {
+    display: none;
+  }
+
+  .page-head {
+    padding: 0 0 4mm;
+  }
+
+  .page-head .lab-entry-title {
+    max-width: none;
+    font-size: 30pt;
+    line-height: 1;
+  }
+
+  .lab-entry-title,
+  .lab-entry-body h2 {
+    color: #2b47ff;
+  }
+
+  .lab-entry-content {
+    display: block;
+  }
+
+  .lab-entry-body {
+    width: 100%;
+    padding: 5mm 0 0;
+    border-left: 0;
+    overflow-wrap: break-word;
+  }
+
+  .lab-entry-body h2 {
+    margin: 9mm 0 3mm;
+    line-height: 1;
+  }
+
+  .lab-entry-body h3 {
+    margin: 6mm 0 2mm;
+  }
+
+  .lab-entry-body p,
+  .lab-entry-body li {
+    orphans: 2;
+    widows: 2;
+  }
+
+  h1,
+  h2,
+  h3,
+  summary {
+    break-after: avoid;
+  }
+
+  /* Every table of the post is shorter than a page, so each stays whole, with the line that introduces it. */
+  figure,
+  aside,
+  summary,
+  table,
+  tr,
+  img {
+    break-inside: avoid;
+  }
+
+  p:has(+ table) {
+    break-after: avoid;
+  }
+
+  /* Paper has no player. */
+  .lab-entry-body .lab-video iframe {
+    display: none;
+  }
+
+  .print-film {
+    display: block;
+  }
+
+  .print-film img {
+    width: 100%;
+    margin: 0;
+  }
+
+  .lab-entry-body .lab-video figcaption a::after {
+    content: " (" attr(href) ")";
+  }
+
+  .lab-entry-body .lab-figure,
+  .lab-entry-body .lab-video {
+    margin: 5mm 0;
+  }
+
+  .lab-entry-body .lab-figure img {
+    background: #fff;
+  }
+
+  .lab-entry-body table {
+    margin: 4mm 0;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  .lab-entry-body .lab-note {
+    border: 1pt solid #000;
+    background: none;
+    color: #000;
+  }
+
+  /* Every FAQ answer is on paper, without the plus sign that opens it. */
+  .lab-entry-body .lab-faq summary {
+    min-height: 0;
+  }
+
+  .lab-entry-body .lab-faq summary::after,
+  .lab-entry-body .lab-faq[open] summary::after {
+    content: none;
+  }
+
+  details::details-content {
+    display: block;
+    height: auto;
+    content-visibility: visible;
+  }
+}
