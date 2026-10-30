@@ -348,7 +348,7 @@ html.has-reel .reel.is-on { opacity: 1; }
   .run__text > h3, .chapter > h3 { font-size: 13pt; margin-block: 4mm 2mm; }
   .chapter :is(p, li) { orphans: 2; widows: 2; }
   .chapter > table { font-size: 9.5pt; }
-  h1, h2, h3, summary { break-after: avoid; }
+  h1, h2, h3, summary { break-after: avoid; break-inside: avoid; }
   figure, aside, summary, tr, img { break-inside: avoid; }
   .lab-note { border: .75pt solid #000; background: none; }
   .lab-faq { display: block; }
