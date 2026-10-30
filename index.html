@@ -8,7 +8,7 @@
 <meta name="description" content="Without PET, CSF or the APOE gene, can we still predict which MCI patients will progress to dementia (an ADNI clinical diagnosis) within 24 months (up to 30 with visit tolerance)? With MRI, 4 variables reach AUROC 0.815; without it, a points table on paper using MoCA, MMSE, sex and schooling reaches about 0.769. Research on ADNI data, not yet validated in Thai patients.">
 <link rel="canonical" href="https://mingrath.com/lab/predicting-mci-to-alzheimers-with-thai-clinic-data/">
 <link rel="icon" href="data:,">
-<meta name="theme-color" content="#2b47ff">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Predicting MCI to Alzheimer&#x27;s with the data Thai clinics really have">
 <meta property="og:description" content="Without PET, CSF or the APOE gene, can we still predict which MCI patients will progress to dementia (an ADNI clinical diagnosis) within 24 months (up to 30 with visit tolerance)? With MRI, 4 variables reach AUROC 0.815; without it, a points table on paper using MoCA, MMSE, sex and schooling reaches about 0.769. Research on ADNI data, not yet validated in Thai patients.">
@@ -18,7 +18,9 @@
 <meta property="og:image:width" content="1920">
 <meta property="og:image:height" content="1080">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/libre-caslon-condensed-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/style.css">
+<script src="assets/effect.js" defer></script>
 <script>
 (() => {
   // On paper nothing stays collapsed, and every picture is there. Details the reader had closed close again afterwards.
@@ -39,13 +41,17 @@
 </script>
 </head>
 <body>
-<main>
+<a class="skip-link" href="#english">Skip to content</a>
+<main class="shell">
 <article class="lab-entry">
 <header class="page-head">
 <h1 class="lab-entry-title">Predicting MCI to Alzheimer's with the data Thai clinics really have</h1>
 <p class="page-byline">Mingrath Mekavichai DVM MSc</p>
 <p class="page-project">A Brain Code Camp 2026 final project</p>
 <p class="page-thai">A Thai version is on <a href="https://mingrath.com/lab/predicting-mci-to-alzheimers-with-thai-clinic-data/#thai">mingrath.com</a></p>
+<div class="page-preview" aria-hidden="true">
+<div class="page-preview-frame"><img src="media/s01.webp" width="1920" height="1080" alt="" decoding="async"></div>
+</div>
 </header>
 <div class="lab-entry-content">
 <div class="lab-entry-body">
@@ -570,5 +576,7 @@
 </div>
 </article>
 </main>
+<canvas class="motion-trail" aria-hidden="true" hidden></canvas>
+<button class="motion-ball" type="button" aria-label="Play with the animated ball" hidden>MM</button>
 </body>
 </html>
