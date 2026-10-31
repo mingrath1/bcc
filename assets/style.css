@@ -3,6 +3,13 @@
   src: url("fonts/libre-caslon-condensed-400.woff2") format("woff2");
   font-display: swap;
 }
+/* Omega for the ball, plus the page's Greek, minus and arrow: Libre Caslon lacks the first three and its arrow is lopsided. */
+@font-face {
+  font-family: "Page Symbols";
+  src: url("fonts/eb-garamond-symbols.woff2") format("woff2");
+  font-display: swap;
+  unicode-range: U+03A9, U+03B1, U+03B2, U+2192, U+2212;
+}
 
 :root {
   color-scheme: light;
@@ -11,7 +18,7 @@
   --soft: #676767;
   --hair: #e2e2e0;
   --blue: #1a22f0;
-  --serif: "Libre Caslon Condensed", Georgia, serif;
+  --serif: "Page Symbols", "Libre Caslon Condensed", Georgia, "Times New Roman", serif;
   --size: 1.0625rem;
   --line: 1.65rem;
   --gutter: 2.75rem;
@@ -329,13 +336,14 @@ html.has-reel .reel.is-on { opacity: 1; }
   .jump, .reel, .tailspace, .tools, .tools-toggle, .floor, .orb, .orb-shadow, .orb-grip, .orb-home, .chapter__media, .run__slot { display: none !important; }
   .page, .lede, .run, .run__text { display: block; max-width: none; padding: 0; }
   .masthead { position: static; display: block; height: auto; padding: 0 0 4mm; border-bottom: .75pt solid #000; }
-  .masthead__picture { width: 22mm; margin-bottom: 2mm; }
+  .masthead__picture { width: 16mm; margin-bottom: 1.5mm; }
   .masthead__name { font-size: 20pt; }
   .masthead__role { margin-top: 1mm; font-size: 10pt; line-height: 14pt; }
   .masthead__links { display: none; }
   .body { padding: 4mm 0 0; border: 0; }
-  .lede { margin-bottom: 5mm; }
+  .lede { margin-bottom: 3mm; }
   .lede__title { font-size: 24pt; line-height: 1.05; margin-bottom: 4mm; }
+  .lede li + li { margin-top: 1mm; }
   .lede .lab-video { position: static; margin-top: 4mm; }
   .lab-video iframe { display: none; }
   .print-film { display: block; }
@@ -348,8 +356,10 @@ html.has-reel .reel.is-on { opacity: 1; }
   .run__text > h3, .chapter > h3 { font-size: 13pt; margin-block: 4mm 2mm; }
   .chapter :is(p, li) { orphans: 2; widows: 2; }
   .chapter > table { font-size: 9.5pt; }
+  .run:has(+ table), .run:has(+ table) .run__text, .run:has(+ table) .run__text > :last-child { break-after: avoid; }
+  .chapter:last-of-type :is(p, li) { font-size: 10pt; line-height: 13.5pt; }
   h1, h2, h3, summary { break-after: avoid; break-inside: avoid; }
-  figure, aside, summary, tr, img { break-inside: avoid; }
+  figure, aside, summary, tr, img, .chapter > table { break-inside: avoid; }
   .lab-note { border: .75pt solid #000; background: none; }
   .lab-faq { display: block; }
   .lab-faq summary { display: block; }

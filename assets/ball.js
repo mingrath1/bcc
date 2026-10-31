@@ -1019,6 +1019,7 @@
 
   // --- Art: BCC material only ---
   const ART = 256;
+  const MARK = "\u03a9";
   const makeCanvas = () => {
     const canvas = document.createElement("canvas");
     canvas.width = canvas.height = ART;
@@ -1069,17 +1070,23 @@
     art.glyphs = { ...art.glyphs, brain: source };
     return canvas;
   };
+  // The ball's mark: an omega, for Ohm. The page's symbol font has it; the stack falls back to any serif that does.
   const makeInitials = async () => {
     const family = getComputedStyle(document.body).fontFamily;
-    const size = ART * 0.46;
-    await document.fonts.load(`${size}px ${family}`, "MM");
+    const size = ART * 0.8;
+    await document.fonts.load(`${size}px ${family}`, MARK);
     const canvas = document.createElement("canvas");
     canvas.width = canvas.height = ART;
     const context = canvas.getContext("2d");
     context.font = `${size}px ${family}`;
     context.textAlign = "center";
     context.textBaseline = "alphabetic";
-    context.fillText("MM", ART / 2, (ART + context.measureText("MM").actualBoundingBoxAscent) / 2);
+    const { actualBoundingBoxAscent: up, actualBoundingBoxDescent: down } = context.measureText(MARK);
+    const y = (ART + up - down) / 2;
+    context.lineWidth = ART * 0.012; // Thickens the hairlines, which the small ball would lose.
+    context.lineJoin = "round";
+    context.fillText(MARK, ART / 2, y);
+    context.strokeText(MARK, ART / 2, y);
     return canvas;
   };
 
