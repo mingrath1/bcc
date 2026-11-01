@@ -80,6 +80,9 @@ img { max-width: 100%; height: auto; }
 }
 .jump:focus { top: .9rem; }
 
+/* Cover banner above the page frame: whole picture, never cropped, its height capped on desktop. */
+.hero__image { width: 100%; max-height: 65svh; object-fit: contain; }
+
 /* Page frame: a sticky masthead column, then two columns of article. */
 .page {
   display: grid;
@@ -300,6 +303,7 @@ html.has-reel .reel.is-on { opacity: 1; }
 
 /* Tablet: masthead on top, ball lane on the left, words beside the reel, slides at full width. */
 @media (max-width: 780px) {
+  .hero__image { max-height: none; }
   .page { display: block; padding-left: calc(var(--gutter) + var(--lane)); }
   .masthead { position: static; height: auto; padding-block: 1.75rem 1.9rem; }
   .masthead__links { margin-top: 0; }
@@ -333,7 +337,7 @@ html.has-reel .reel.is-on { opacity: 1; }
 @media print {
   :root { --paper: #fff; --ink: #000; --soft: #222; --hair: #999; --size: 10.5pt; --line: 15pt; }
   html, body { background: #fff; color: #000; scroll-behavior: auto; }
-  .jump, .reel, .tailspace, .tools, .tools-toggle, .floor, .orb, .orb-shadow, .orb-grip, .orb-home, .chapter__media, .run__slot { display: none !important; }
+  .jump, .hero, .reel, .tailspace, .tools, .tools-toggle, .floor, .orb, .orb-shadow, .orb-grip, .orb-home, .chapter__media, .run__slot { display: none !important; }
   .page, .lede, .run, .run__text { display: block; max-width: none; padding: 0; }
   .masthead { position: static; display: block; height: auto; padding: 0 0 4mm; border-bottom: .75pt solid #000; }
   .masthead__picture { width: 16mm; margin-bottom: 1.5mm; }
